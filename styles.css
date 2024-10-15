@@ -57,12 +57,12 @@
   .eco-container:before {
     content: '';
     position: absolute;
-    width: 300px; /* Increased width */
-    height: 300px; /* Increased height */
-    top: -30px; /* Adjusted top position */
+    width: 150px; /* Increased width */
+    height: 150px; /* Increased height */
+    top: 30px; /* Adjusted top position */
     left: 50%;
     transform: translateX(-50%);
-    background: url('img/logo.jpeg') no-repeat center center;
+    background: url('img/logo.jpg') no-repeat center center;
     background-size: contain;
     opacity: 0.15; /* Marca de agua en la parte superior */
   }
