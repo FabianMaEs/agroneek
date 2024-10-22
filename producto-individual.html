@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgroNeek - Producto</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+        <div class="container">
+          <a href="#" class="logo">
+            <img src="img/logo.jpg" alt="">
+          </a>
+          <ul class="nav-links">
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="about.html">Sobre Nosotros</a></li>
+            <li><a href="productos.html">Productos</a></li>
+            <li><a href="mailto:agroneek@agroneek.com">Contacto</a></li>
+            <div class="cart-icon">
+                <a href="cart.html">
+                    <i class="fas fa-shopping-cart"></i>
+                  <span id="cart-count">0</span>
+                </a>
+              </div>
+            <li></li>
+          </ul>
+        </div>
+      </nav>
+  </header>
+
+  <main>
+    <section class="product-detail">
+      <img id="product-image" src="" alt="">
+      <div class="product-info">
+        <h1 id="product-name"></h1>
+        <p id="product-description"></p>
+        <p class="price" id="product-price"></p>
+        <button onclick="addToCart()">Agregar al Carrito</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <p>&copy; 2024 AgroNeek. Todos los derechos reservados.</p>
+      <div class="social-icons">
+        <a href="https://facebook.com"><i class="fab fa-facebook"></i></a>
+        <a href="https://x.com"><i class="fab fa-twitter"></i></a>
+        <a href="https://www.instagram.com/agro_neek/"><i class="fab fa-instagram"></i></a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Función para obtener el valor del parámetro 'pack' de la URL
+    function getParameterByName(name) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(name);
+    }
+
+    // Información de los productos
+    const productos = {
+      50: {
+        id: 1,
+        nombre: "Paquete con 50 semillas",
+        descripcion: "Ideal para pequeñas producciones agrícolas.",
+        precio: "$199.99",
+        imagen: "img-prods/semillas_50.jpeg"
+      },
+      100: {
+        id: 2,
+        nombre: "Paquete con 100 semillas",
+        descripcion: "Perfecto para huertos medianos con necesidades específicas.",
+        precio: "$349.99",
+        imagen: "img-prods/semillas_100.jpeg"
+      },
+      250: {
+        id: 3,
+        nombre: "Paquete con 250 semillas",
+        descripcion: "Para cultivos medianos que requieren un rendimiento óptimo.",
+        precio: "$699.99",
+        imagen: "img-prods/semillas_250.jpeg"
+      },
+      500: {
+        id: 4,
+        nombre: "Paquete con 500 semillas",
+        descripcion: "Rinde más en terrenos agrícolas medianos a grandes.",
+        precio: "$1299.99",
+        imagen: "img-prods/semillas_500.jpeg"
+      },
+      1000: {
+        id: 5,
+        nombre: "Paquete con 1000 semillas",
+        descripcion: "Excelente para grandes producciones agrícolas.",
+        precio: "$2499.99",
+        imagen: "img-prods/semillas_1000.jpeg"
+      },
+      2500: {
+        id: 6,
+        nombre: "Paquete con 2500 semillas",
+        descripcion: "Ideal para maximizar la producción en terrenos extensos.",
+        precio: "$5499.99",
+        imagen: "img-prods/semillas_2500.jpeg"
+      }
+    };
+
+    // Obtener el valor del parámetro 'pack' y actualizar la información del producto
+    const pack = getParameterByName('pack');
+    if (pack && productos[pack]) {
+      document.getElementById('product-name').textContent = productos[pack].nombre;
+      document.getElementById('product-description').textContent = productos[pack].descripcion;
+      document.getElementById('product-price').textContent = productos[pack].precio;
+      document.getElementById('product-image').src = productos[pack].imagen;
+      document.getElementById('product-image').alt = productos[pack].nombre;
+    } else {
+      // Mostrar mensaje si el producto no existe
+      document.querySelector('.product-detail').innerHTML = '<h2>Producto no encontrado</h2>';
+    }
+
+    // Función para actualizar el contador de productos en el carrito
+    function updateCartCount() {
+        const totalItems = cart.reduce((acc, product) => acc + product.quantity, 0);
+        cartCountElement.textContent = totalItems;
+    }
+
+    // Función para añadir productos al carrito
+    function addToCart() {
+
+        productId = productos[pack].id;
+        productName = productos[pack].nombre;
+        productPrice = productos[pack].precio;
+
+        const product = { id: productId, name: productName, price: productPrice, quantity: 1 };
+        
+        // Verificar si el producto ya está en el carrito
+        const existingProductIndex = cart.findIndex(item => item.id === productId);
+        
+        if (existingProductIndex > -1) {
+            // Si el producto ya está en el carrito, aumentar la cantidad
+            cart[existingProductIndex].quantity += 1;
+        } else {
+            // Si no está en el carrito, agregarlo
+            cart.push(product);
+        }
+        
+        // Guardar el carrito actualizado en el Local Storage
+        localStorage.setItem('cart', JSON.stringify(cart));
+        
+        // Actualizar el contador del carrito
+        updateCartCount();
+    }
+
+    // Alerta con SweetAlert2
+    document.querySelector('button').addEventListener('click', () => {
+    Swal.fire({
+        title: '¡Agregado al carrito!',
+        text: 'El producto se ha añadido correctamente.',
+        icon: 'success',
+        confirmButtonText: 'Cerrar'
+    });
+    });
+
+  </script>
+  <script src="script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://kit.fontawesome.com/ade620492b.js" crossorigin="anonymous"></script>
+</body>
+</html>

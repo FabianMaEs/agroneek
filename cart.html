@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgroNeek - Carrito de Compras</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+        <div class="container">
+          <a href="#" class="logo">
+            <img src="img/logo.jpg" alt="">
+          </a>
+          <ul class="nav-links">
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="about.html">Sobre Nosotros</a></li>
+            <li><a href="productos.html">Productos</a></li>
+            <li><a href="mailto:agroneek@agroneek.com">Contacto</a></li>
+            <div class="cart-icon">
+                <a href="cart.html">
+                    <i class="fas fa-shopping-cart"></i>
+                  <span id="cart-count">0</span>
+                </a>
+              </div>
+            <li></li>
+          </ul>
+        </div>
+      </nav>
+  </header>
+
+
+  <!-- Contenido del Carrito -->
+  <main>
+    <section class="cart-section">
+      <h1>Tu Carrito</h1>
+      <div id="cart-items"></div>
+    </section>
+  </main>
+
+  <!-- Script para cargar los productos del carrito -->
+  <script>
+    const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+    const cartItemsContainer = document.getElementById('cart-items');
+
+    if (cartItems.length === 0) {
+      cartItemsContainer.innerHTML = '<p>Tu carrito está vacío.</p>';
+    } else {
+      let total = 0;
+      const table = document.createElement('table');
+      table.className = 'cart-table';
+      table.innerHTML = `
+        <thead>
+          <tr>
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <th>Precio Unitario</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      `;
+      const tbody = table.querySelector('tbody');
+      
+      cartItems.forEach(item => {
+        console.log(item);
+        const row = document.createElement('tr');
+        // Convertir el precio a numero ('$349.99' -> 349.99)
+        const price = parseFloat(item.price.replace('$', ''));
+        const totalItemPrice = price * item.quantity;
+        total += totalItemPrice;
+        
+        row.innerHTML = `
+          <td>${item.name}</td>
+          <td>${item.quantity}</td>
+          <td>${item.price}</td>
+          <td>${totalItemPrice.toFixed(2)}</td>
+        `;
+        tbody.appendChild(row);
+      });
+
+      cartItemsContainer.appendChild(table);
+
+      // Mostrar el total general
+      const totalElement = document.createElement('div');
+      totalElement.className = 'cart-total';
+      totalElement.innerHTML = `<h2>Total a pagar: $${total.toFixed(2)}</h2>`;
+      cartItemsContainer.appendChild(totalElement);
+    }
+
+    // Actualizar el contador del carrito
+    const cartCountElement = document.getElementById('cart-count');
+    const totalItems = cartItems.reduce((acc, product) => acc + product.quantity, 0);
+    cartCountElement.textContent = totalItems;
+  </script>
+    <script src="https://kit.fontawesome.com/ade620492b.js" crossorigin="anonymous"></script>
+</body>
+</html>

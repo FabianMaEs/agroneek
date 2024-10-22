@@ -31,3 +31,31 @@ document.addEventListener("DOMContentLoaded", () => {
   // Cambio automático de diapositivas
   setInterval(nextSlide, 5000); // Cambiar cada 5 segundos
 });
+
+// Galería de productos: Efecto de hover en imágenes
+const productItems = document.querySelectorAll('.product-card');
+
+productItems.forEach(item => {
+  item.addEventListener('mouseover', () => {
+    item.style.transform = 'scale(1.05)';
+  });
+
+  item.addEventListener('mouseout', () => {
+    item.style.transform = 'scale(1)';
+  });
+});
+
+
+// Carrito de compras
+
+let cart = JSON.parse(localStorage.getItem('cart')) || [];
+const cartCountElement = document.getElementById('cart-count');
+
+// Función para actualizar el contador de productos en el carrito
+function updateCartCount() {
+  const totalItems = cart.reduce((acc, product) => acc + product.quantity, 0);
+  cartCountElement.textContent = totalItems;
+}
+
+// Inicializar el contador del carrito al cargar la página
+updateCartCount();
